@@ -129,11 +129,11 @@ export default function ChatInterface({ onSendMessage, messages, isLoading }: Ch
 
   const suggestedTopics = [
     'Help me process big emotions',
-    'I need better communication skills',
-    'How to set healthy boundaries',
-    'Understand my attachment style',
-    'Work on my core wounds',
-    'Navigate relationship conflicts'
+    'I\'m triggered - help me understand why',
+    'What\'s my attachment style?',
+    'Why do I struggle with setting boundaries?',
+    'I keep attracting the same relationship patterns',
+    'How do I reprogram my core wounds?'
   ];
 
   return (
