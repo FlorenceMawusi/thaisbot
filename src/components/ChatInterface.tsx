@@ -17,7 +17,7 @@ import {
   Fade,
   Divider,
 } from '@mui/material';
-import { keyframes } from '@mui/system';
+
 import ReactMarkdown from 'react-markdown';
 import {
   Send as SendIcon,
@@ -87,19 +87,14 @@ const inputPaperStyle = {
   bottom: 0,
 };
 
-// Add blinking cursor animation for streaming
-const blinkAnimation = keyframes`
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
-`;
-
 export default function ChatInterface({ onSendMessage, messages, isLoading }: ChatInterfaceProps) {
   const [inputValue, setInputValue] = useState('');
   const [isUserAtBottom, setIsUserAtBottom] = useState(true);
-  const [shouldAutoScroll, setShouldAutoScroll] = useState(true);
+  const [userHasScrolledUp, setUserHasScrolledUp] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const previousMessageCountRef = useRef(0);
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -116,15 +111,29 @@ export default function ChatInterface({ onSendMessage, messages, isLoading }: Ch
   }, []);
 
   const handleScroll = useCallback(() => {
-    checkIfUserAtBottom();
-  }, [checkIfUserAtBottom]);
+    const wasAtBottom = checkIfUserAtBottom();
+    
+    // If user scrolled up manually, mark that they've scrolled up
+    if (!wasAtBottom && !userHasScrolledUp) {
+      setUserHasScrolledUp(true);
+    }
+  }, [checkIfUserAtBottom, userHasScrolledUp]);
 
-  // Only auto-scroll if user is at bottom or when they send a new message
+  // Smart scroll logic
   useEffect(() => {
-    if (shouldAutoScroll && isUserAtBottom) {
+    const messageCountChanged = messages.length !== previousMessageCountRef.current;
+    const isNewMessage = messageCountChanged && messages.length > previousMessageCountRef.current;
+    
+    // Update the ref
+    previousMessageCountRef.current = messages.length;
+    
+    // Only auto-scroll in these cases:
+    // 1. User just sent a new message and hasn't scrolled up manually
+    // 2. User is at bottom and hasn't scrolled up manually
+    if (isNewMessage && !userHasScrolledUp) {
       scrollToBottom();
     }
-  }, [messages, scrollToBottom, shouldAutoScroll, isUserAtBottom]);
+  }, [messages, scrollToBottom, userHasScrolledUp]);
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
@@ -133,8 +142,8 @@ export default function ChatInterface({ onSendMessage, messages, isLoading }: Ch
     const message = inputValue.trim();
     setInputValue('');
     
-    // Force scroll to bottom when user sends a message
-    setShouldAutoScroll(true);
+    // Reset scroll state when user sends a new message
+    setUserHasScrolledUp(false);
     setIsUserAtBottom(true);
     
     try {
@@ -164,16 +173,20 @@ export default function ChatInterface({ onSendMessage, messages, isLoading }: Ch
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', display: 'flex', flexDirection: 'column' }}>
       {/* Header */}
       <Paper elevation={2} sx={headerStyle}>
-        <Container maxWidth="lg" sx={{ py: 3 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-            <Avatar sx={avatarStyle}>
+        <Container maxWidth="lg" sx={{ py: { xs: 1.5, sm: 3 }, px: { xs: 2, sm: 3 } }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1.5, sm: 2 }, mb: { xs: 1, sm: 2 } }}>
+            <Avatar sx={{
+              ...avatarStyle,
+              width: { xs: 40, sm: 48 },
+              height: { xs: 40, sm: 48 }
+            }}>
               <PsychologyIcon />
             </Avatar>
             <Box>
-              <Typography variant="h1" component="h1" sx={{ fontSize: '1.75rem', mb: 0.5 }}>
+              <Typography variant="h1" component="h1" sx={{ fontSize: { xs: '1.25rem', sm: '1.75rem' }, mb: 0.5 }}>
                 Thais Gibson Psychology Assistant
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
                 Your supportive guide for attachment, trauma, and relationship insights
               </Typography>
             </Box>
@@ -191,7 +204,16 @@ export default function ChatInterface({ onSendMessage, messages, isLoading }: Ch
       </Paper>
 
       {/* Messages */}
-      <Container maxWidth="lg" sx={{ flex: 1, py: 3, display: 'flex', flexDirection: 'column' }}>
+      <Container 
+        maxWidth="lg" 
+        sx={{ 
+          flex: 1, 
+          py: { xs: 1, sm: 3 }, 
+          px: { xs: 1, sm: 3 },
+          display: 'flex', 
+          flexDirection: 'column' 
+        }}
+      >
         <Box 
           ref={messagesContainerRef}
           onScroll={handleScroll}
@@ -232,14 +254,20 @@ export default function ChatInterface({ onSendMessage, messages, isLoading }: Ch
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                     Try starting with:
                   </Typography>
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: 'center' }}>
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: { xs: 0.5, sm: 1 }, justifyContent: 'center' }}>
                     {suggestedTopics.map((topic) => (
                       <Chip
                         key={topic}
                         label={topic}
                         clickable
                         onClick={() => setInputValue(topic)}
-                        sx={chipClickableStyle}
+                        sx={{
+                          ...chipClickableStyle,
+                          fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                          height: { xs: 32, sm: 36 },
+                          minHeight: 44, // Touch target
+                          px: { xs: 1, sm: 1.5 }
+                        }}
                       />
                     ))}
                   </Box>
@@ -255,15 +283,16 @@ export default function ChatInterface({ onSendMessage, messages, isLoading }: Ch
                   sx={{
                     display: 'flex',
                     justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start',
-                    mb: 4,
+                    mb: { xs: 2, sm: 4 },
+                    px: { xs: 0.5, sm: 0 },
                   }}
                 >
                   <Box
                     sx={{
                       display: 'flex',
                       alignItems: 'flex-start',
-                      gap: 2,
-                      maxWidth: '70%',
+                      gap: { xs: 1, sm: 2 },
+                      maxWidth: { xs: '90%', sm: '70%' },
                       flexDirection: message.role === 'user' ? 'row-reverse' : 'row',
                     }}
                   >
@@ -340,11 +369,20 @@ export default function ChatInterface({ onSendMessage, messages, isLoading }: Ch
 
         {/* Input */}
         {useMemo(() => (
-          <Paper elevation={3} sx={inputPaperStyle}>
+          <Paper elevation={3} sx={{
+            ...inputPaperStyle,
+            mx: { xs: 1, sm: 0 },
+            mb: { xs: 1, sm: 0 }
+          }}>
             <Box
               component="form"
               onSubmit={handleSubmit}
-              sx={{ display: 'flex', gap: 2, alignItems: 'flex-end' }}
+              sx={{ 
+                display: 'flex', 
+                gap: { xs: 1, sm: 2 }, 
+                alignItems: 'flex-end',
+                p: { xs: 1, sm: 2 }
+              }}
             >
               <TextField
                 ref={inputRef}
@@ -363,9 +401,10 @@ export default function ChatInterface({ onSendMessage, messages, isLoading }: Ch
                 variant="contained"
                 disabled={!inputValue.trim() || isLoading}
                 sx={{ 
-                  minWidth: 56,
-                  height: 56,
+                  minWidth: { xs: 48, sm: 56 },
+                  height: { xs: 48, sm: 56 },
                   borderRadius: 2,
+                  minHeight: 44, // Minimum touch target
                 }}
               >
                 <SendIcon />

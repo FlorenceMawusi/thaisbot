@@ -15,7 +15,6 @@ export default function Home() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showError, setShowError] = useState(false);
 
   const sendMessage = useCallback(async (messageContent: string) => {
     if (!messageContent.trim() || isLoading) return;
@@ -36,7 +35,6 @@ export default function Home() {
 
     setIsLoading(true);
     setError(null);
-    setShowError(false);
 
     // Create assistant message placeholder for streaming
     const assistantMessageId = uuidv4();
@@ -127,7 +125,6 @@ export default function Home() {
       console.error('Error sending message:', error);
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
       setError(errorMessage);
-      setShowError(true);
       
       // Update the assistant message with error
       setCurrentSession(prev => ({
@@ -148,7 +145,6 @@ export default function Home() {
   }, [currentSession.messages, isLoading]);
 
   const handleCloseError = () => {
-    setShowError(false);
     setError(null);
   };
 
@@ -161,7 +157,7 @@ export default function Home() {
       />
       
       <Snackbar 
-        open={showError} 
+        open={!!error} 
         autoHideDuration={6000} 
         onClose={handleCloseError}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
