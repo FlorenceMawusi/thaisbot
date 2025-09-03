@@ -11,6 +11,11 @@ import './globals.css';
 export const metadata: Metadata = {
   title: "Thais Gibson Psychology Assistant",
   description: "A supportive AI assistant for exploring attachment, trauma, and relationship psychology",
+  icons: {
+    icon: '/thais-icon-top.png',
+    shortcut: '/thais-icon-top.png',
+    apple: '/thais-icon-top.png',
+  },
 };
 
 export default function RootLayout({
