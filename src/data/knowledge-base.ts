@@ -143,11 +143,12 @@ export const knowledgeBase: KnowledgeBase = {
         'Seek evidence of worthiness',
         'Practice receiving love'
       ],
-      affirmations: [
-        'I am worthy of love exactly as I am',
-        'My worth is not dependent on others\' approval',
-        'I deserve healthy, loving relationships'
-      ]
+      oppositeEvidence: [
+        'Vividly recall times when you were loved and accepted - imagine being there, see the person\'s face, feel the warmth of that acceptance in your body',
+        'Relive moments when you felt worthy - put yourself back in that scene, feel the emotions you felt then, notice the sensations of being valued',
+        'Re-experience achievements that came from your authentic self - feel the pride and satisfaction as if it\'s happening now'
+      ],
+      imagery: 'Visualize yourself being loved and accepted exactly as you are, feeling the warmth and safety of that acceptance in your body'
     },
     {
       name: 'I am not safe',
@@ -170,11 +171,12 @@ export const knowledgeBase: KnowledgeBase = {
         'Nervous system regulation',
         'Trauma therapy'
       ],
-      affirmations: [
-        'I am safe in this moment',
-        'I can handle whatever comes my way',
-        'I have the resources to protect myself'
-      ]
+      oppositeEvidence: [
+        'Vividly relive times when you successfully navigated challenges - put yourself back there, feel the confidence and strength you had, notice how capable you felt',
+        'Re-experience moments when you felt truly safe - imagine the environment, feel the peace and security in your body as if you\'re there now',
+        'Relive instances of your resilience - feel the determination and power you had, experience those emotions of overcoming difficulty'
+      ],
+      imagery: 'Visualize yourself in a completely safe environment, feeling grounded and protected, notice the calm sensations in your body'
     },
     {
       name: 'I cannot trust others',
@@ -197,11 +199,12 @@ export const knowledgeBase: KnowledgeBase = {
         'Practice vulnerability gradually',
         'Work on discernment vs. walls'
       ],
-      affirmations: [
-        'I can learn to trust wisely',
-        'Some people are trustworthy',
-        'I can protect myself while staying open'
-      ]
+      oppositeEvidence: [
+        'Vividly remember trustworthy people in your life - see their faces, recall specific moments they showed up for you, feel the security and warmth you felt with them',
+        'Relive times when trusting someone led to positive outcomes - put yourself back in those moments, feel the relief and joy of being supported',
+        'Re-experience moments when you accurately discerned trustworthy people - feel the wisdom and intuition you had, notice how good it felt to trust wisely'
+      ],
+      imagery: 'Visualize yourself surrounded by trustworthy people who have your back, feeling the security and warmth of healthy relationships'
     },
     {
       name: 'I am not good enough',
@@ -224,11 +227,12 @@ export const knowledgeBase: KnowledgeBase = {
         'Challenge cruel internal dialogue',
         'Practice gratitude for your qualities'
       ],
-      affirmations: [
-        'I am enough exactly as I am',
-        'My worth is not dependent on performance',
-        'I have valuable qualities and abilities'
-      ]
+      oppositeEvidence: [
+        'Vividly relive specific accomplishments - put yourself back in those moments of success, feel the pride and satisfaction coursing through your body, notice how capable you felt',
+        'Re-experience times when people valued you for who you are - see their expressions, hear their words, feel the warmth of being appreciated for your authentic self',
+        'Relive challenges you overcame - feel the determination you had, experience the triumph and strength, let those emotions fill your body as if it\'s happening now'
+      ],
+      imagery: 'Visualize yourself succeeding at something important, feeling confident and capable, notice the pride and satisfaction in your body'
     },
     {
       name: 'I am helpless',
@@ -251,11 +255,12 @@ export const knowledgeBase: KnowledgeBase = {
         'Build skills and competencies',
         'Challenge helpless thoughts with evidence'
       ],
-      affirmations: [
-        'I have the power to influence my life',
-        'I can learn and grow from challenges',
-        'I am resourceful and capable'
-      ]
+      oppositeEvidence: [
+        'Vividly relive times when you took action and created positive change - put yourself back there, feel the power and agency you had, experience the satisfaction of making things happen',
+        'Re-experience finding solutions to difficult problems - feel the clarity and resourcefulness you had, notice the confidence that came with solving challenges',
+        'Relive moments when you helped yourself or others overcome challenges - feel the strength and capability, experience the emotions of being effective and powerful'
+      ],
+      imagery: 'Visualize yourself taking effective action in a challenging situation, feeling empowered and in control, sense the strength in your body'
     }
   ],
 
@@ -557,16 +562,17 @@ export const knowledgeBase: KnowledgeBase = {
     },
     {
       name: 'Core Wound Reprogramming (Thais Gibson Method)',
-      purpose: 'Reprogram core wounds using Thais Gibson\'s evidence-based approach with repetition and emotion',
+      purpose: 'Reprogram core wounds using Thais Gibson\'s evidence-based approach with vivid emotional re-experiencing',
       instructions: [
         'Ask yourself what your core wounds have cost you in personal and professional life',
         'Become aware of how outdated and cruel your internal dialogue really is',
-        'Start reprogramming by looking at your accomplishments that prove the wound wrong',
-        'Find things that give you a boost - notice what you\'re capable of',
-        'Focus on your natural abilities and feel the emotions in your body',
-        'Look at relationships where you show up as enough/safe/worthy',
-        'Practice gratitude for the beautiful qualities you\'ve discovered about yourself',
-        'Use repetition and emotion daily to rewire neural pathways'
+        'Find opposite evidence - specific memories that contradict your core wound',
+        'CRITICAL: Make the evidence vivid - put yourself back in those moments completely',
+        'See the scene, hear the sounds, feel what you felt then - make it emotionally real',
+        'Let the positive emotions from those memories fill your body as if it\'s happening now',
+        'Use imagery to visualize the opposite of your wound - feel it in your nervous system',
+        'Repeat this daily with the same vivid memories to create new neural pathways',
+        'The key is emotional intensity - feel it, don\'t just think it'
       ],
       timeNeeded: '20-30 minutes daily',
       category: 'wounds',

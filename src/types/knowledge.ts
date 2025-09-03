@@ -15,7 +15,8 @@ export interface CoreWound {
   commonTriggers: string[];
   manifestations: string[];
   healingStrategies: string[];
-  affirmations: string[];
+  oppositeEvidence: string[];
+  imagery: string;
 }
 
 export interface HumanNeed {
