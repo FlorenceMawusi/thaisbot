@@ -95,16 +95,36 @@ const blinkAnimation = keyframes`
 
 export default function ChatInterface({ onSendMessage, messages, isLoading }: ChatInterfaceProps) {
   const [inputValue, setInputValue] = useState('');
+  const [isUserAtBottom, setIsUserAtBottom] = useState(true);
+  const [shouldAutoScroll, setShouldAutoScroll] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, []);
 
+  const checkIfUserAtBottom = useCallback(() => {
+    const container = messagesContainerRef.current;
+    if (!container) return true;
+    
+    const threshold = 100; // pixels from bottom
+    const isAtBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - threshold;
+    setIsUserAtBottom(isAtBottom);
+    return isAtBottom;
+  }, []);
+
+  const handleScroll = useCallback(() => {
+    checkIfUserAtBottom();
+  }, [checkIfUserAtBottom]);
+
+  // Only auto-scroll if user is at bottom or when they send a new message
   useEffect(() => {
-    scrollToBottom();
-  }, [messages, scrollToBottom]);
+    if (shouldAutoScroll && isUserAtBottom) {
+      scrollToBottom();
+    }
+  }, [messages, scrollToBottom, shouldAutoScroll, isUserAtBottom]);
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
@@ -112,6 +132,10 @@ export default function ChatInterface({ onSendMessage, messages, isLoading }: Ch
 
     const message = inputValue.trim();
     setInputValue('');
+    
+    // Force scroll to bottom when user sends a message
+    setShouldAutoScroll(true);
+    setIsUserAtBottom(true);
     
     try {
       await onSendMessage(message);
@@ -168,7 +192,11 @@ export default function ChatInterface({ onSendMessage, messages, isLoading }: Ch
 
       {/* Messages */}
       <Container maxWidth="lg" sx={{ flex: 1, py: 3, display: 'flex', flexDirection: 'column' }}>
-        <Box sx={{ flex: 1, mb: 3 }}>
+        <Box 
+          ref={messagesContainerRef}
+          onScroll={handleScroll}
+          sx={{ flex: 1, mb: 3, overflow: 'auto' }}
+        >
           {messages.length === 0 && (
             <Fade in timeout={800}>
               <Card sx={cardStyle}>
