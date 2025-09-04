@@ -55,15 +55,34 @@ const cardStyle = {
 };
 
 const chipOutlinedStyle = {
-  borderColor: 'primary.main',
-  color: 'primary.main',
-  '&:hover': { bgcolor: 'rgba(74, 144, 164, 0.1)' }
+  bgcolor: 'rgba(139, 157, 195, 0.08)',
+  color: 'text.secondary',
+  border: 'none',
+  fontSize: '0.75rem',
+  fontWeight: 400,
+  cursor: 'default',
+  pointerEvents: 'none',
+  '&:hover': {
+    bgcolor: 'rgba(139, 157, 195, 0.08)', // No hover change
+  }
 };
 
 const chipClickableStyle = {
-  bgcolor: 'rgba(139, 157, 195, 0.2)',
-  color: 'secondary.main',
-  '&:hover': { bgcolor: 'rgba(139, 157, 195, 0.3)' }
+  bgcolor: 'transparent',
+  color: 'primary.main',
+  border: '2px solid',
+  borderColor: 'primary.main',
+  fontWeight: 500,
+  transition: 'all 0.2s ease-in-out',
+  '&:hover': { 
+    bgcolor: 'primary.main',
+    color: 'white',
+    transform: 'translateY(-1px)',
+    boxShadow: '0 4px 12px rgba(74, 144, 164, 0.25)',
+  },
+  '&:active': {
+    transform: 'translateY(0px)',
+  }
 };
 
 const userMessageStyle = {
@@ -227,7 +246,7 @@ export default function ChatInterface({ onSendMessage, messages, isLoading }: Ch
                   <Typography variant="h3" component="h2" gutterBottom>
                     How can I support you today?
                   </Typography>
-                  <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                  <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
                     I&apos;m here to help you explore and understand:
                   </Typography>
                   
